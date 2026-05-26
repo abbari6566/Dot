@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SessionStatus {
+  COMPLETED
+  INTERRUPTED
+}
+
+model User {
+  id           String           @id @default(cuid())
+  email        String           @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  sessions     PomodoroSession[]
+  focusLocks   FocusLock[]
+}
+
+model PomodoroSession {
+  id          String        @id @default(cuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  duration    Int
+  startedAt   DateTime
+  completedAt DateTime?
+  status      SessionStatus
+  createdAt   DateTime      @default(now())
+}
+
+model FocusLock {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  startedAt DateTime  @default(now())
+  endedAt   DateTime?
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+}
