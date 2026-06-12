@@ -4,12 +4,22 @@ import {
   generateTokens,
 } from "../services/authService.js";
 import { Request, Response } from "express";
+import { registerSchema, loginSchema } from "../utils/validators.js";
 import jwt from "jsonwebtoken";
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { email, name, password } = req.body;
+    const validated = registerSchema.safeParse(req.body);
+
+    if (!validated.success) {
+      res.status(400).json({ message: validated.error.flatten().fieldErrors });
+      return;
+    }
+
+    const { email, name, password } = validated.data;
+
     const result = await registerUser(email, name, password);
+
     res.status(201).json({ user: result });
   } catch (error) {
     if (error instanceof Error) {
@@ -27,7 +37,12 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const validated = loginSchema.safeParse(req.body);
+    if (!validated.success) {
+      res.status(400).json({ message: validated.error.flatten().fieldErrors });
+      return;
+    }
+    const { email, password } = validated.data;
     const loggedIn = await loginUser(email, password);
     res.cookie("refreshToken", loggedIn.refreshToken, {
       httpOnly: true,
@@ -49,6 +64,7 @@ export const login = async (req: Request, res: Response) => {
     }
   }
 };
+
 export const refresh = async (req: Request, res: Response) => {
   try {
     // read the refresh token from the HTTP-only cookie

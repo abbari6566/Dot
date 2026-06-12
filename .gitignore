@@ -2,7 +2,8 @@
 node_modules/
 
 # Environment variables
-.env
+.env*
+!.env.example
 
 # Compiled output
 dist/
@@ -15,4 +16,5 @@ Thumbs.db
 *.log
 npm-debug.log*
 
+#claude code config
 .claude
