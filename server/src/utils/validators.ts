@@ -10,3 +10,8 @@ export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8).max(100),
 });
+
+export const startPomodoroSchema = z.object({
+  duration: z.number().int().min(1).max(180).default(45),
+  totalSessions: z.number().int().min(1).max(20).default(1),
+});

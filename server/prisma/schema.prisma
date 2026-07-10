@@ -7,30 +7,57 @@ datasource db {
 }
 
 enum SessionStatus {
+  IN_PROGRESS
+  COMPLETED
+  INTERRUPTED
+}
+
+enum CycleStatus {
+  IN_PROGRESS
   COMPLETED
   INTERRUPTED
 }
 
 model User {
-  id           String           @id @default(cuid())
-  email        String           @unique
+  id           String            @id @default(cuid())
+  email        String            @unique
   name         String
   passwordHash String
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  cycles       PomodoroCycle[]
   sessions     PomodoroSession[]
   focusLocks   FocusLock[]
 }
 
+model PomodoroCycle {
+  id            String            @id @default(cuid())
+  userId        String
+  user          User              @relation(fields: [userId], references: [id])
+  duration      Int
+  totalSessions Int
+  status        CycleStatus       @default(IN_PROGRESS)
+  createdAt     DateTime          @default(now())
+  completedAt   DateTime?
+  sessions      PomodoroSession[]
+
+  @@index([userId])
+}
+
 model PomodoroSession {
-  id          String        @id @default(cuid())
-  userId      String
-  user        User          @relation(fields: [userId], references: [id])
-  duration    Int
-  startedAt   DateTime
-  completedAt DateTime?
-  status      SessionStatus
-  createdAt   DateTime      @default(now())
+  id            String        @id @default(cuid())
+  cycleId       String
+  cycle         PomodoroCycle @relation(fields: [cycleId], references: [id])
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  sessionNumber Int
+  status        SessionStatus @default(IN_PROGRESS)
+  startedAt     DateTime      @default(now())
+  completedAt   DateTime?
+  createdAt     DateTime      @default(now())
+
+  @@index([cycleId])
+  @@index([userId])
 }
 
 model FocusLock {

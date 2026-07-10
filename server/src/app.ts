@@ -4,6 +4,7 @@ import express from "express";
 import limiter from "./middleware/rateLimiter.js";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.js";
+import pomodoroRouter from "./routes/pomodoro.js";
 
 const app = express();
 app.use(helmet());
@@ -18,5 +19,6 @@ app.use(express.json());
 app.use(limiter);
 
 app.use("/auth", authRouter);
+app.use("/pomodoro", pomodoroRouter);
 
 export default app;
