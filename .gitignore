@@ -18,3 +18,9 @@ npm-debug.log*
 
 #claude code config
 .claude
+
+#design html
+design.html
+
+#client - TypeScript build-cache files
+*.tsbuildinfo

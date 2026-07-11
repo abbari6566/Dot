@@ -46,8 +46,8 @@ export const login = async (req: Request, res: Response) => {
     const loggedIn = await loginUser(email, password);
     res.cookie("refreshToken", loggedIn.refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
     });
     res.status(200).json({ accessToken: loggedIn.accessToken });
@@ -83,8 +83,8 @@ export const refresh = async (req: Request, res: Response) => {
     // set the new refresh token as a cookie — replaces the old one
     res.cookie("refreshToken", tokens.refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     //send the new access token to the client
@@ -98,8 +98,8 @@ export const refresh = async (req: Request, res: Response) => {
 export const logout = (_req: Request, res: Response) => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: true,
-    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
   });
   res.status(200).json({ message: "Logged out successfully" });
 };
