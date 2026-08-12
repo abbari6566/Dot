@@ -20,3 +20,10 @@ nav button {
 .history-list {
   border-radius: 10px;
 }
+
+.topic-form,
+.card-form,
+.reminder-panel,
+.study-card {
+  border-radius: 12px;
+}

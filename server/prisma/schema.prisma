@@ -28,12 +28,99 @@ model User {
   cycles       PomodoroCycle[]
   sessions     PomodoroSession[]
   focusLocks   FocusLock[]
+  flashcardTopics FlashcardTopic[]
+  flashcardGroups FlashcardGroup[]
+  flashcards      Flashcard[]
+  reviewReminders ReviewReminder[]
+  pushSubscriptions PushSubscription[]
+}
+
+model FlashcardTopic {
+  id          String           @id @default(cuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  groups      FlashcardGroup[]
+  flashcards  Flashcard[]
+
+  @@index([userId])
+  @@unique([userId, name])
+}
+
+model FlashcardGroup {
+  id          String           @id @default(cuid())
+  topicId     String
+  topic       FlashcardTopic   @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  flashcards  Flashcard[]
+  reminder    ReviewReminder?
+
+  @@index([topicId])
+  @@index([userId])
+  @@unique([topicId, name])
+}
+
+model Flashcard {
+  id        String         @id @default(cuid())
+  topicId   String
+  topic     FlashcardTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  groupId   String
+  group     FlashcardGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question  String
+  answer    String
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@index([topicId])
+  @@index([groupId])
+  @@index([userId])
+}
+
+model ReviewReminder {
+  id                 String         @id @default(cuid())
+  groupId            String         @unique
+  group              FlashcardGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId             String
+  user               User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  timeOfDay          String
+  timezone           String
+  enabled            Boolean        @default(true)
+  nextNotificationAt DateTime
+  lastNotifiedAt     DateTime?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([enabled, nextNotificationAt])
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model PomodoroCycle {
   id            String            @id @default(cuid())
   userId        String
-  user          User              @relation(fields: [userId], references: [id])
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   duration      Int
   totalSessions Int
   status        CycleStatus       @default(IN_PROGRESS)
@@ -47,9 +134,9 @@ model PomodoroCycle {
 model PomodoroSession {
   id            String        @id @default(cuid())
   cycleId       String
-  cycle         PomodoroCycle @relation(fields: [cycleId], references: [id])
+  cycle         PomodoroCycle @relation(fields: [cycleId], references: [id], onDelete: Cascade)
   userId        String
-  user          User          @relation(fields: [userId], references: [id])
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   sessionNumber Int
   status        SessionStatus @default(IN_PROGRESS)
   startedAt     DateTime      @default(now())
@@ -63,7 +150,7 @@ model PomodoroSession {
 model FocusLock {
   id        String    @id @default(cuid())
   userId    String
-  user      User      @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   startedAt DateTime  @default(now())
   endedAt   DateTime?
   isActive  Boolean   @default(true)

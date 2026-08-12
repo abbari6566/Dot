@@ -1,4 +1,4 @@
-import type { PomodoroCycle } from "./types";
+import type { Flashcard, FlashcardGroup, FlashcardTopic, PomodoroCycle, ReviewReminder } from "./types";
 
 const API_URL = import.meta.env.VITE_API_URL || "/api";
 let accessToken = sessionStorage.getItem("dot.accessToken");
@@ -53,4 +53,26 @@ export const api = {
   start: (duration: number, totalSessions: number) => request<{ cycle: PomodoroCycle }>("/pomodoro/start", { method: "POST", body: JSON.stringify({ duration, totalSessions }) }),
   complete: (sessionId: string) => request<{ nextSession: PomodoroCycle["sessions"][number] | null }>(`/pomodoro/${sessionId}/complete`, { method: "PATCH" }),
   interrupt: (sessionId: string) => request(`/pomodoro/${sessionId}/interrupt`, { method: "PATCH" }),
+  topics: () => request<{ topics: FlashcardTopic[] }>("/flashcards/topics"),
+  createTopic: (body: { name: string; description?: string }) =>
+    request<{ topic: FlashcardTopic }>("/flashcards/topics", { method: "POST", body: JSON.stringify(body) }),
+  updateTopic: (id: string, body: { name?: string; description?: string | null }) =>
+    request<{ topic: FlashcardTopic }>(`/flashcards/topics/${id}`, { method: "PATCH", body: JSON.stringify(body) }),
+  deleteTopic: (id: string) => request(`/flashcards/topics/${id}`, { method: "DELETE" }),
+  createGroup: (topicId: string, body: { name: string; description?: string }) =>
+    request<{ group: FlashcardGroup }>(`/flashcards/topics/${topicId}/groups`, { method: "POST", body: JSON.stringify(body) }),
+  updateGroup: (id: string, body: { name?: string; description?: string | null }) =>
+    request<{ group: FlashcardGroup }>(`/flashcards/groups/${id}`, { method: "PATCH", body: JSON.stringify(body) }),
+  deleteGroup: (id: string) => request(`/flashcards/groups/${id}`, { method: "DELETE" }),
+  createCard: (groupId: string, body: { question: string; answer: string }) =>
+    request<{ card: Flashcard }>(`/flashcards/groups/${groupId}/cards`, { method: "POST", body: JSON.stringify(body) }),
+  updateCard: (id: string, body: { question?: string; answer?: string }) =>
+    request<{ card: Flashcard }>(`/flashcards/cards/${id}`, { method: "PATCH", body: JSON.stringify(body) }),
+  deleteCard: (id: string) => request(`/flashcards/cards/${id}`, { method: "DELETE" }),
+  setReminder: (groupId: string, body: { timeOfDay: string; timezone: string; enabled: boolean }) =>
+    request<{ reminder: ReviewReminder }>(`/flashcards/groups/${groupId}/reminder`, { method: "PUT", body: JSON.stringify(body) }),
+  deleteReminder: (groupId: string) => request(`/flashcards/groups/${groupId}/reminder`, { method: "DELETE" }),
+  pushPublicKey: () => request<{ publicKey: string }>("/flashcards/notifications/public-key"),
+  savePushSubscription: (subscription: PushSubscriptionJSON) =>
+    request("/flashcards/notifications/subscriptions", { method: "POST", body: JSON.stringify(subscription) }),
 };

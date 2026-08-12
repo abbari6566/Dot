@@ -1,0 +1,12 @@
+{
+  "name": ".DOT Productivity",
+  "short_name": ".DOT",
+  "description": "Focus sessions and flashcard review reminders.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f2f2",
+  "theme_color": "#f3f2f2",
+  "icons": [
+    { "src": "/dot.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

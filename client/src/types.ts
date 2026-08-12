@@ -19,3 +19,45 @@ export interface PomodoroCycle {
   completedAt: string | null;
   sessions: PomodoroSession[];
 }
+
+export interface Flashcard {
+  id: string;
+  topicId: string;
+  groupId: string;
+  question: string;
+  answer: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ReviewReminder {
+  id: string;
+  groupId: string;
+  timeOfDay: string;
+  timezone: string;
+  enabled: boolean;
+  nextNotificationAt: string;
+  lastNotifiedAt: string | null;
+}
+
+export interface FlashcardTopic {
+  id: string;
+  name: string;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+  groups: FlashcardGroup[];
+  _count: { groups: number };
+}
+
+export interface FlashcardGroup {
+  id: string;
+  topicId: string;
+  name: string;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+  flashcards: Flashcard[];
+  reminder: ReviewReminder | null;
+  _count: { flashcards: number };
+}
