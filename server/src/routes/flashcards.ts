@@ -17,6 +17,8 @@ router.patch("/cards/:id", controller.updateCard);
 router.delete("/cards/:id", controller.deleteCard);
 router.put("/groups/:groupId/reminder", controller.setReminder);
 router.delete("/groups/:groupId/reminder", controller.deleteReminder);
+router.post("/cards/:id/review", controller.reviewCard);
+router.get("/review-stats", controller.reviewStats);
 router.get("/notifications/public-key", controller.publicKey);
 router.post("/notifications/subscriptions", controller.subscribe);
 router.delete("/notifications/subscriptions", controller.unsubscribe);

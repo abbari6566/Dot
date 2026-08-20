@@ -40,6 +40,16 @@ export const generateTokens = (userId: string) => {
   return { accessToken, refreshToken };
 };
 
+export const getUserById = async (userId: string) => {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const { passwordHash: _, ...safeUser } = user;
+  return safeUser;
+};
+
 export const loginUser = async (email: string, password: string) => {
   //find user by email
   const user = await prisma.user.findUnique({ where: { email } });
@@ -51,4 +61,32 @@ export const loginUser = async (email: string, password: string) => {
     throw new Error("Invalid credentials");
   }
   return generateTokens(user.id);
+};
+
+export const updateDailyGoal = async (userId: string, dailyGoal: number) => {
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: { dailyGoal },
+  });
+  const { passwordHash: _, ...safeUser } = user;
+  return safeUser;
+};
+
+export const updateProfile = async (userId: string, data: { name?: string; email?: string }) => {
+  if (data.email) {
+    const existing = await prisma.user.findUnique({ where: { email: data.email } });
+    if (existing && existing.id !== userId) throw new Error("Email already in use");
+  }
+  const user = await prisma.user.update({ where: { id: userId }, data });
+  const { passwordHash: _, ...safeUser } = user;
+  return safeUser;
+};
+
+export const changePassword = async (userId: string, currentPassword: string, newPassword: string) => {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new Error("User not found");
+  const valid = await bcrypt.compare(currentPassword, user.passwordHash);
+  if (!valid) throw new Error("Current password is incorrect");
+  const passwordHash = await bcrypt.hash(newPassword, 12);
+  await prisma.user.update({ where: { id: userId }, data: { passwordHash } });
 };

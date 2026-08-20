@@ -1,10 +1,14 @@
 import {
   registerUser,
   loginUser,
+  getUserById,
   generateTokens,
+  updateDailyGoal,
+  updateProfile,
+  changePassword,
 } from "../services/authService.js";
 import { Request, Response } from "express";
-import { registerSchema, loginSchema } from "../utils/validators.js";
+import { registerSchema, loginSchema, dailyGoalSchema, profileUpdateSchema, passwordChangeSchema } from "../utils/validators.js";
 import jwt from "jsonwebtoken";
 
 export const register = async (req: Request, res: Response) => {
@@ -102,4 +106,71 @@ export const logout = (_req: Request, res: Response) => {
     sameSite: "lax",
   });
   res.status(200).json({ message: "Logged out successfully" });
+};
+
+export const me = async (req: Request, res: Response) => {
+  try {
+    const user = await getUserById(req.userId!);
+    res.status(200).json({ user });
+  } catch (error) {
+    if (error instanceof Error && error.message === "User not found") {
+      res.status(404).json({ message: "User not found" });
+    } else {
+      console.error(error instanceof Error ? error.message : error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+};
+
+export const updateGoal = async (req: Request, res: Response) => {
+  try {
+    const validated = dailyGoalSchema.safeParse(req.body);
+    if (!validated.success) {
+      res.status(400).json({ message: validated.error.flatten().fieldErrors });
+      return;
+    }
+    const user = await updateDailyGoal(req.userId!, validated.data.dailyGoal);
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const updateProfileHandler = async (req: Request, res: Response) => {
+  try {
+    const validated = profileUpdateSchema.safeParse(req.body);
+    if (!validated.success) {
+      res.status(400).json({ message: validated.error.flatten().fieldErrors });
+      return;
+    }
+    const user = await updateProfile(req.userId!, validated.data);
+    res.status(200).json({ user });
+  } catch (error) {
+    if (error instanceof Error && error.message === "Email already in use") {
+      res.status(409).json({ message: error.message });
+      return;
+    }
+    console.error(error instanceof Error ? error.message : error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const changePasswordHandler = async (req: Request, res: Response) => {
+  try {
+    const validated = passwordChangeSchema.safeParse(req.body);
+    if (!validated.success) {
+      res.status(400).json({ message: validated.error.flatten().fieldErrors });
+      return;
+    }
+    await changePassword(req.userId!, validated.data.currentPassword, validated.data.newPassword);
+    res.status(200).json({ message: "Password updated" });
+  } catch (error) {
+    if (error instanceof Error && error.message === "Current password is incorrect") {
+      res.status(401).json({ message: error.message });
+      return;
+    }
+    console.error(error instanceof Error ? error.message : error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };

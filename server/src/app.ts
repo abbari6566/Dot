@@ -8,6 +8,8 @@ import { notFoundHandler, errorHandler } from "./middleware/errorHandler.js";
 import authRouter from "./routes/auth.js";
 import pomodoroRouter from "./routes/pomodoro.js";
 import flashcardRouter from "./routes/flashcards.js";
+import notesRouter from "./routes/notes.js";
+import countdownRouter from "./routes/countdowns.js";
 
 const app = express();
 
@@ -34,6 +36,8 @@ app.get("/health", (_req, res) => {
 app.use("/auth", authRouter);
 app.use("/pomodoro", pomodoroRouter);
 app.use("/flashcards", flashcardRouter);
+app.use("/notes", notesRouter);
+app.use("/countdowns", countdownRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

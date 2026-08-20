@@ -4,6 +4,7 @@ import {
   flashcardUpdateSchema,
   pushSubscriptionSchema,
   reminderSchema,
+  reviewGradeSchema,
   topicSchema,
   topicUpdateSchema,
   groupSchema,
@@ -81,6 +82,15 @@ export const setReminder = async (req: Request, res: Response) => {
 
 export const deleteReminder = async (req: Request, res: Response) => {
   try { await service.deleteReminder(String(req.params.groupId), req.userId!); res.status(204).send(); } catch (error) { fail(res, error); }
+};
+
+export const reviewCard = async (req: Request, res: Response) => {
+  const data = parse(res, reviewGradeSchema.safeParse(req.body)); if (!data) return;
+  try { res.json({ card: await service.reviewCard(String(req.params.id), req.userId!, data.grade) }); } catch (error) { fail(res, error); }
+};
+
+export const reviewStats = async (req: Request, res: Response) => {
+  try { res.json(await service.getReviewStats(req.userId!)); } catch (error) { fail(res, error); }
 };
 
 export const publicKey = (_req: Request, res: Response) => {

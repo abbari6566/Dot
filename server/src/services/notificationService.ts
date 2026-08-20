@@ -2,16 +2,39 @@ import webpush from "web-push";
 import prisma from "../utils/prisma.js";
 import { nextOccurrence } from "./flashcardService.js";
 
-let running = false;
+let remindersRunning = false;
+let notesRunning = false;
 let timer: NodeJS.Timeout | undefined;
 
 const configured = () => Boolean(
   process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY && process.env.VAPID_SUBJECT,
 );
 
+type PushUser = {
+  pushSubscriptions: { id: string; endpoint: string; p256dh: string; auth: string }[];
+};
+
+const sendPushToUser = async (user: PushUser, payload: string) => {
+  await Promise.all(user.pushSubscriptions.map(async (subscription) => {
+    try {
+      await webpush.sendNotification({
+        endpoint: subscription.endpoint,
+        keys: { p256dh: subscription.p256dh, auth: subscription.auth },
+      }, payload);
+    } catch (error) {
+      const statusCode = typeof error === "object" && error && "statusCode" in error ? error.statusCode : undefined;
+      if (statusCode === 404 || statusCode === 410) {
+        await prisma.pushSubscription.delete({ where: { id: subscription.id } });
+      } else {
+        console.error("Push delivery failed", error);
+      }
+    }
+  }));
+};
+
 export const dispatchDueReminders = async () => {
-  if (!configured() || running) return;
-  running = true;
+  if (!configured() || remindersRunning) return;
+  remindersRunning = true;
   try {
     const reminders = await prisma.reviewReminder.findMany({
       where: { enabled: true, nextNotificationAt: { lte: new Date() } },
@@ -29,21 +52,7 @@ export const dispatchDueReminders = async () => {
         url: `/?view=flashcards&topic=${reminder.group.topicId}&group=${reminder.groupId}`,
       });
 
-      await Promise.all(reminder.user.pushSubscriptions.map(async (subscription) => {
-        try {
-          await webpush.sendNotification({
-            endpoint: subscription.endpoint,
-            keys: { p256dh: subscription.p256dh, auth: subscription.auth },
-          }, payload);
-        } catch (error) {
-          const statusCode = typeof error === "object" && error && "statusCode" in error ? error.statusCode : undefined;
-          if (statusCode === 404 || statusCode === 410) {
-            await prisma.pushSubscription.delete({ where: { id: subscription.id } });
-          } else {
-            console.error("Push delivery failed", error);
-          }
-        }
-      }));
+      await sendPushToUser(reminder.user, payload);
 
       const now = new Date();
       await prisma.reviewReminder.update({
@@ -55,8 +64,38 @@ export const dispatchDueReminders = async () => {
       });
     }
   } finally {
-    running = false;
+    remindersRunning = false;
   }
+};
+
+export const dispatchDueNoteReminders = async () => {
+  if (!configured() || notesRunning) return;
+  notesRunning = true;
+  try {
+    const notes = await prisma.note.findMany({
+      where: { remindAt: { lte: new Date() }, remindedAt: null },
+      include: { user: { include: { pushSubscriptions: true } } },
+      take: 50,
+    });
+
+    for (const note of notes) {
+      const payload = JSON.stringify({
+        title: `Note reminder: ${note.title}`,
+        body: "You asked to be reminded of this note.",
+        url: `/?view=notes&note=${note.id}`,
+      });
+
+      await sendPushToUser(note.user, payload);
+      await prisma.note.update({ where: { id: note.id }, data: { remindedAt: new Date() } });
+    }
+  } finally {
+    notesRunning = false;
+  }
+};
+
+const tick = () => {
+  void dispatchDueReminders();
+  void dispatchDueNoteReminders();
 };
 
 export const startNotificationScheduler = () => {
@@ -69,8 +108,8 @@ export const startNotificationScheduler = () => {
     process.env.VAPID_PUBLIC_KEY!,
     process.env.VAPID_PRIVATE_KEY!,
   );
-  void dispatchDueReminders();
-  timer = setInterval(() => void dispatchDueReminders(), 60_000);
+  tick();
+  timer = setInterval(tick, 60_000);
 };
 
 export const stopNotificationScheduler = () => {

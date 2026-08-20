@@ -1,29 +1,43 @@
 /* A restrained radius scale keeps the interface crisp while preserving softness. */
 .primary,
-.outline,
-.auth-card input,
-.setup-grid input,
-nav button {
-  border-radius: 8px;
+.outline {
+  border-radius: 13px;
 }
 
-.banner {
-  border-radius: 7px;
+.sidebar-nav-btn {
+  border-radius: 14px;
+}
+
+.auth-card input,
+.tm-preset-grid input,
+.fc-inline-form input,
+.fc-editor textarea,
+.fc-reminder input,
+.set-grid-2 input,
+.set-grid-3 input {
+  border-radius: 12px;
 }
 
 .timer-card,
 .session-card,
-.stats-grid article {
-  border-radius: 12px;
+.tm-track,
+.stats-grid article,
+.streak-card,
+.fc-group-card,
+.fc-new-group-card {
+  border-radius: 22px;
 }
 
-.history-list {
-  border-radius: 10px;
+.history-list,
+.set-card {
+  border-radius: 22px;
 }
 
-.topic-form,
-.card-form,
-.reminder-panel,
-.study-card {
-  border-radius: 12px;
+.auth-card {
+  border-radius: 26px;
+}
+
+.fc-reminder,
+.fc-editor {
+  border-radius: 18px;
 }

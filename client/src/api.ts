@@ -1,4 +1,4 @@
-import type { Flashcard, FlashcardGroup, FlashcardTopic, PomodoroCycle, ReviewReminder } from "./types";
+import type { Countdown, Flashcard, FlashcardGroup, FlashcardTopic, Note, NoteFolder, NoteTask, PomodoroCycle, ReviewGrade, ReviewReminder, ReviewStats, UserProfile } from "./types";
 
 const API_URL = import.meta.env.VITE_API_URL || "/api";
 let accessToken = sessionStorage.getItem("dot.accessToken");
@@ -48,6 +48,10 @@ export const api = {
     await request("/auth/logout", { method: "POST" }, false).catch(() => undefined);
     setToken(null);
   },
+  me: () => request<{ user: UserProfile }>("/auth/me"),
+  updateDailyGoal: (dailyGoal: number) => request<{ user: UserProfile }>("/auth/daily-goal", { method: "PATCH", body: JSON.stringify({ dailyGoal }) }),
+  updateProfile: (body: { name?: string; email?: string }) => request<{ user: UserProfile }>("/auth/profile", { method: "PATCH", body: JSON.stringify(body) }),
+  changePassword: (body: { currentPassword: string; newPassword: string }) => request<{ message: string }>("/auth/password", { method: "PATCH", body: JSON.stringify(body) }),
   active: () => request<{ cycle: PomodoroCycle | null }>("/pomodoro/active"),
   history: () => request<{ cycles: PomodoroCycle[] }>("/pomodoro/history"),
   start: (duration: number, totalSessions: number) => request<{ cycle: PomodoroCycle }>("/pomodoro/start", { method: "POST", body: JSON.stringify({ duration, totalSessions }) }),
@@ -72,7 +76,27 @@ export const api = {
   setReminder: (groupId: string, body: { timeOfDay: string; timezone: string; enabled: boolean }) =>
     request<{ reminder: ReviewReminder }>(`/flashcards/groups/${groupId}/reminder`, { method: "PUT", body: JSON.stringify(body) }),
   deleteReminder: (groupId: string) => request(`/flashcards/groups/${groupId}/reminder`, { method: "DELETE" }),
+  reviewCard: (id: string, grade: ReviewGrade) => request<{ card: Flashcard }>(`/flashcards/cards/${id}/review`, { method: "POST", body: JSON.stringify({ grade }) }),
+  reviewStats: () => request<ReviewStats>("/flashcards/review-stats"),
   pushPublicKey: () => request<{ publicKey: string }>("/flashcards/notifications/public-key"),
   savePushSubscription: (subscription: PushSubscriptionJSON) =>
     request("/flashcards/notifications/subscriptions", { method: "POST", body: JSON.stringify(subscription) }),
+  notes: () => request<{ folders: NoteFolder[] }>("/notes"),
+  createFolder: (name: string) => request<{ folder: NoteFolder }>("/notes/folders", { method: "POST", body: JSON.stringify({ name }) }),
+  renameFolder: (id: string, name: string) => request<{ folder: NoteFolder }>(`/notes/folders/${id}`, { method: "PATCH", body: JSON.stringify({ name }) }),
+  deleteFolder: (id: string) => request(`/notes/folders/${id}`, { method: "DELETE" }),
+  createNote: (folderId: string, title: string) => request<{ note: Note }>("/notes", { method: "POST", body: JSON.stringify({ folderId, title }) }),
+  getNote: (id: string) => request<{ note: Note }>(`/notes/${id}`),
+  updateNote: (id: string, body: { title?: string; content?: string; remindAt?: string | null }) =>
+    request<{ note: Note }>(`/notes/${id}`, { method: "PATCH", body: JSON.stringify(body) }),
+  deleteNote: (id: string) => request(`/notes/${id}`, { method: "DELETE" }),
+  createTask: (noteId: string, text: string) => request<{ task: NoteTask }>(`/notes/${noteId}/tasks`, { method: "POST", body: JSON.stringify({ text }) }),
+  toggleTask: (id: string, done: boolean) => request<{ task: NoteTask }>(`/notes/tasks/${id}`, { method: "PATCH", body: JSON.stringify({ done }) }),
+  deleteTask: (id: string) => request(`/notes/tasks/${id}`, { method: "DELETE" }),
+  countdowns: () => request<{ countdowns: Countdown[] }>("/countdowns"),
+  createCountdown: (body: { title: string; targetDate: string; color?: string }) =>
+    request<{ countdown: Countdown }>("/countdowns", { method: "POST", body: JSON.stringify(body) }),
+  updateCountdown: (id: string, body: { title?: string; targetDate?: string; color?: string | null }) =>
+    request<{ countdown: Countdown }>(`/countdowns/${id}`, { method: "PATCH", body: JSON.stringify(body) }),
+  deleteCountdown: (id: string) => request(`/countdowns/${id}`, { method: "DELETE" }),
 };

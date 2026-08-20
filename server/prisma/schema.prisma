@@ -18,11 +18,19 @@ enum CycleStatus {
   INTERRUPTED
 }
 
+enum ReviewGrade {
+  AGAIN
+  HARD
+  GOOD
+  EASY
+}
+
 model User {
   id           String            @id @default(cuid())
   email        String            @unique
   name         String
   passwordHash String
+  dailyGoal    Int               @default(5)
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
   cycles       PomodoroCycle[]
@@ -31,8 +39,13 @@ model User {
   flashcardTopics FlashcardTopic[]
   flashcardGroups FlashcardGroup[]
   flashcards      Flashcard[]
+  flashcardReviews FlashcardReview[]
   reviewReminders ReviewReminder[]
   pushSubscriptions PushSubscription[]
+  noteFolders     NoteFolder[]
+  notes           Note[]
+  noteTasks       NoteTask[]
+  countdowns      Countdown[]
 }
 
 model FlashcardTopic {
@@ -69,21 +82,42 @@ model FlashcardGroup {
 }
 
 model Flashcard {
-  id        String         @id @default(cuid())
-  topicId   String
-  topic     FlashcardTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
-  groupId   String
-  group     FlashcardGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  question  String
-  answer    String
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  id             String            @id @default(cuid())
+  topicId        String
+  topic          FlashcardTopic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  groupId        String
+  group          FlashcardGroup    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question       String
+  answer         String
+  dueAt          DateTime          @default(now())
+  intervalDays   Float             @default(0)
+  easeFactor     Float             @default(2.5)
+  reps           Int               @default(0)
+  lastReviewedAt DateTime?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  reviews        FlashcardReview[]
 
   @@index([topicId])
   @@index([groupId])
   @@index([userId])
+  @@index([dueAt])
+}
+
+model FlashcardReview {
+  id         String      @id @default(cuid())
+  cardId     String
+  card       Flashcard   @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  grade      ReviewGrade
+  correct    Boolean
+  reviewedAt DateTime    @default(now())
+
+  @@index([cardId])
+  @@index([userId, reviewedAt])
 }
 
 model ReviewReminder {
@@ -155,4 +189,63 @@ model FocusLock {
   endedAt   DateTime?
   isActive  Boolean   @default(true)
   createdAt DateTime  @default(now())
+}
+
+model NoteFolder {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  notes     Note[]
+
+  @@index([userId])
+}
+
+model Note {
+  id         String     @id @default(cuid())
+  folderId   String
+  folder     NoteFolder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String     @default("Untitled")
+  content    String     @default("")
+  remindAt   DateTime?
+  remindedAt DateTime?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  tasks      NoteTask[]
+
+  @@index([folderId])
+  @@index([userId])
+  @@index([remindAt])
+}
+
+model NoteTask {
+  id          String   @id @default(cuid())
+  noteId      String
+  note        Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  text        String
+  done        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
+
+  @@index([noteId])
+  @@index([userId])
+}
+
+model Countdown {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  targetDate  DateTime
+  color       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
 }
