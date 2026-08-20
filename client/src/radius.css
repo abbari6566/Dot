@@ -1,11 +1,11 @@
 /* A restrained radius scale keeps the interface crisp while preserving softness. */
 .primary,
 .outline {
-  border-radius: 13px;
+  border-radius: 11px;
 }
 
 .sidebar-nav-btn {
-  border-radius: 14px;
+  border-radius: 12px;
 }
 
 .auth-card input,
@@ -15,7 +15,7 @@
 .fc-reminder input,
 .set-grid-2 input,
 .set-grid-3 input {
-  border-radius: 12px;
+  border-radius: 10px;
 }
 
 .timer-card,
@@ -25,19 +25,19 @@
 .streak-card,
 .fc-group-card,
 .fc-new-group-card {
-  border-radius: 22px;
+  border-radius: 19px;
 }
 
 .history-list,
 .set-card {
-  border-radius: 22px;
+  border-radius: 19px;
 }
 
 .auth-card {
-  border-radius: 26px;
+  border-radius: 22px;
 }
 
 .fc-reminder,
 .fc-editor {
-  border-radius: 18px;
+  border-radius: 15px;
 }

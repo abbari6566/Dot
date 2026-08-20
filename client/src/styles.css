@@ -1,26 +1,27 @@
 :root {
-  --bg: #000000;
-  --bg-glow-1: rgba(31, 50, 64, 0.55);
-  --bg-glow-2: rgba(31, 50, 64, 0.28);
-  --panel: rgba(255, 255, 255, 0.045);
-  --panel-2: rgba(255, 255, 255, 0.028);
-  --panel-solid: #080a0c;
+  --bg: #121212;
+  --bg-glow-1: transparent;
+  --bg-glow-2: transparent;
+  --ambient-orb-opacity: 0;
+  --panel: #1a1a1a;
+  --panel-2: #161616;
+  --panel-solid: #181818;
   --border: rgba(255, 255, 255, 0.09);
   --border-strong: rgba(255, 255, 255, 0.16);
   --fg: #f3f6f8;
   --fg-dim: #c3ccd3;
   --muted: #7b858d;
-  --accent: #1f3240;
-  --accent-2: #2b4657;
-  --accent-text: #9cc2d8;
-  --accent-fg: #eaf4fa;
-  --accent-soft: rgba(31, 50, 64, 0.55);
-  --ring: rgba(156, 194, 216, 0.35);
+  --accent: #26323a;
+  --accent-2: #36444d;
+  --accent-text: #d8e1e6;
+  --accent-fg: #ffffff;
+  --accent-soft: rgba(216, 225, 230, 0.12);
+  --ring: rgba(255, 255, 255, 0.22);
   --danger: #e8695f;
   --good: #4fbf8b;
   --warn: #e08b3e;
-  --shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.9);
-  --shadow-sm: 0 10px 24px -14px rgba(0, 0, 0, 0.7);
+  --shadow: 0 0 0 transparent;
+  --shadow-sm: 0 0 0 transparent;
   --inset: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   --sidebar-width: 264px;
   font-family: Archivo, "Helvetica Neue", Helvetica, sans-serif;
@@ -31,8 +32,9 @@
   --bg: #eef1f4;
   --bg-glow-1: rgba(255, 255, 255, 0.9);
   --bg-glow-2: rgba(31, 50, 64, 0.1);
-  --panel: rgba(255, 255, 255, 0.62);
-  --panel-2: rgba(255, 255, 255, 0.4);
+  --ambient-orb-opacity: 0.5;
+  --panel: #ffffff;
+  --panel-2: #f7f9fb;
   --panel-solid: #ffffff;
   --border: rgba(31, 50, 64, 0.1);
   --border-strong: rgba(31, 50, 64, 0.18);
@@ -45,8 +47,8 @@
   --accent-fg: #f4f9fc;
   --accent-soft: rgba(31, 50, 64, 0.08);
   --ring: rgba(31, 50, 64, 0.25);
-  --shadow: 0 24px 60px -30px rgba(17, 26, 33, 0.28);
-  --shadow-sm: 0 10px 24px -16px rgba(17, 26, 33, 0.2);
+  --shadow: 0 0 0 transparent;
+  --shadow-sm: 0 0 0 transparent;
   --inset: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
@@ -86,7 +88,7 @@ body::after {
   pointer-events: none;
   z-index: 0;
   filter: blur(40px);
-  opacity: 0.5;
+  opacity: var(--ambient-orb-opacity);
   animation: drift 22s ease-in-out infinite;
   background: radial-gradient(
     circle at 34% 30%,
@@ -120,8 +122,7 @@ body::after {
   align-items: center;
   gap: 38px;
   border-bottom: 1px solid var(--border);
-  background: color-mix(in srgb, var(--bg) 72%, transparent);
-  backdrop-filter: blur(18px) saturate(150%);
+  background: var(--bg);
 }
 .landing-brand {
   display: flex;
@@ -161,13 +162,13 @@ body::after {
   gap: 3px;
   padding: 3px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 10px;
   background: var(--accent-soft);
 }
 .landing-theme button,
 .landing-cycle button {
   padding: 7px 12px;
-  border-radius: 9px;
+  border-radius: 8px;
   font-size: 12px;
   font-weight: 700;
   color: var(--muted);
@@ -242,7 +243,7 @@ body::after {
   display: inline-grid;
   place-items: center;
   padding: 15px 24px;
-  border-radius: 15px;
+  border-radius: 13px;
   font-size: 14px;
   font-weight: 700;
   border: 1px solid var(--border-strong);
@@ -266,13 +267,13 @@ body::after {
 .landing-cta.small,
 .landing-outline.small {
   padding: 11px 18px;
-  border-radius: 12px;
+  border-radius: 10px;
 }
 .landing-demo {
   margin-top: 64px;
   padding: 14px;
   border: 1px solid var(--border);
-  border-radius: 26px;
+  border-radius: 22px;
   background: var(--panel-2);
   box-shadow: var(--shadow), var(--inset);
 }
@@ -301,7 +302,7 @@ body::after {
   grid-template-columns: 1fr 1fr;
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 15px;
   background: var(--panel);
 }
 .landing-demo-grid > div {
@@ -371,7 +372,7 @@ body::after {
 .landing-countdown {
   padding: 16px;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 14px;
   background: var(--panel-2);
 }
 .landing-mini span {
@@ -417,7 +418,7 @@ body::after {
   margin-top: 56px;
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 17px;
   background: var(--border);
   gap: 1px;
 }
@@ -455,7 +456,7 @@ body::after {
 .landing-plans article {
   padding: 26px;
   border: 1px solid var(--border);
-  border-radius: 22px;
+  border-radius: 19px;
   background: var(--panel);
   box-shadow: var(--inset);
 }
@@ -464,7 +465,7 @@ body::after {
   place-items: center;
   width: 38px;
   height: 38px;
-  border-radius: 12px;
+  border-radius: 10px;
   background: var(--accent-soft);
   color: var(--accent-text);
   font:
@@ -486,7 +487,7 @@ body::after {
   gap: 44px;
   padding: 40px;
   border: 1px solid var(--border);
-  border-radius: 28px;
+  border-radius: 24px;
   background: var(--panel-2);
 }
 .landing-how article {
@@ -495,7 +496,7 @@ body::after {
   padding: 18px;
   margin-top: 14px;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 14px;
   background: var(--panel);
 }
 .landing-how article i {
@@ -519,7 +520,7 @@ body::after {
   place-content: center;
   text-align: center;
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 17px;
   color: var(--muted);
   font:
     11px "JetBrains Mono",
@@ -583,7 +584,7 @@ body::after {
   margin-top: 56px;
   padding: 44px;
   border: 1px solid var(--border);
-  border-radius: 28px;
+  border-radius: 24px;
   background: var(--panel-2);
 }
 .landing-signin h2 {
@@ -595,7 +596,7 @@ body::after {
 .landing-signin > div:last-child {
   padding: 30px;
   border: 1px solid var(--border);
-  border-radius: 22px;
+  border-radius: 19px;
   background: var(--panel);
 }
 .landing-signin button {
@@ -772,7 +773,7 @@ a:hover {
 .primary,
 .outline {
   border: 1px solid transparent;
-  border-radius: 13px;
+  border-radius: 11px;
   padding: 13px 20px;
   font-size: 13px;
   font-weight: 700;
@@ -844,7 +845,7 @@ a:hover {
 }
 .banner {
   padding: 12px 16px;
-  border-radius: 14px;
+  border-radius: 12px;
   background: rgba(232, 105, 95, 0.12);
   border: 1px solid rgba(232, 105, 95, 0.3);
   color: var(--danger);
@@ -932,7 +933,7 @@ a:hover {
   flex-direction: column;
   gap: 16px;
   padding: 34px;
-  border-radius: 26px;
+  border-radius: 22px;
   background: var(--panel);
   backdrop-filter: blur(22px) saturate(150%);
   -webkit-backdrop-filter: blur(22px) saturate(150%);
@@ -963,7 +964,7 @@ a:hover {
   width: 100%;
   border: 1px solid var(--border);
   background: var(--panel-2);
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 12px 14px;
   outline: none;
   color: var(--fg);
@@ -1036,7 +1037,7 @@ a:hover {
   width: 28px;
   height: 28px;
   flex: none;
-  border-radius: 9px;
+  border-radius: 8px;
   border: 1px solid var(--border);
   color: var(--muted);
   display: grid;
@@ -1061,7 +1062,7 @@ a:hover {
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--panel);
   backdrop-filter: blur(20px) saturate(150%);
@@ -1100,7 +1101,7 @@ a:hover {
   gap: 12px;
   width: 100%;
   padding: 11px 12px;
-  border-radius: 14px;
+  border-radius: 12px;
   color: var(--muted);
   font-size: 14px;
   font-weight: 600;
@@ -1114,7 +1115,7 @@ a:hover {
 .sidebar-nav-btn .nav-active-bar {
   position: absolute;
   inset: 0;
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--panel-solid);
   border: 1px solid var(--border);
   z-index: 0;
@@ -1153,7 +1154,7 @@ a:hover {
   left: 0;
   right: 0;
   padding: 6px;
-  border-radius: 16px;
+  border-radius: 14px;
   border: 1px solid var(--border-strong);
   background: var(--panel-solid);
   backdrop-filter: blur(24px);
@@ -1170,7 +1171,7 @@ a:hover {
   gap: 10px;
   width: 100%;
   padding: 11px 12px;
-  border-radius: 11px;
+  border-radius: 9px;
   font-size: 13px;
   font-weight: 600;
   color: var(--fg);
@@ -1193,7 +1194,7 @@ a:hover {
   background: var(--panel-2);
   border: 1px solid var(--border);
   padding: 11px;
-  border-radius: 16px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   gap: 11px;
@@ -1297,7 +1298,7 @@ a:hover {
   align-items: center;
   gap: 14px;
   padding: 20px 22px;
-  border-radius: 20px;
+  border-radius: 17px;
   border: 1px solid var(--border-strong);
   background: var(--panel);
   backdrop-filter: blur(22px) saturate(150%);
@@ -1326,7 +1327,7 @@ a:hover {
   color: var(--muted);
   border: 1px solid var(--border);
   padding: 6px 9px;
-  border-radius: 8px;
+  border-radius: 7px;
   white-space: nowrap;
 }
 
@@ -1336,7 +1337,7 @@ a:hover {
   gap: 1px;
   margin-top: 18px;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
   background: var(--border);
 }
@@ -1427,7 +1428,7 @@ a:hover {
 .tm-preset-form {
   margin-top: 18px;
   border: 1px solid var(--border-strong);
-  border-radius: 20px;
+  border-radius: 17px;
   padding: 22px;
   background: var(--panel);
   backdrop-filter: blur(20px);
@@ -1464,13 +1465,14 @@ a:hover {
 .tm-plan-preview {
   margin-top: 30px;
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 17px;
   padding: 24px;
   background: var(--panel-2);
   backdrop-filter: blur(18px);
 }
 .tm-plan-preview > .eyebrow {
   margin-bottom: 16px;
+  padding-inline: 6px;
 }
 .tm-plan-blocks {
   display: flex;
@@ -1483,7 +1485,7 @@ a:hover {
   font-family: "JetBrains Mono", monospace;
   font-size: 9px;
   letter-spacing: 0.1em;
-  border-radius: 6px;
+  border-radius: 5px;
   transition: all 0.2s;
 }
 .tm-plan-block.focus {
@@ -1498,6 +1500,7 @@ a:hover {
   display: flex;
   justify-content: space-between;
   margin-top: 12px;
+  padding-inline: 6px;
   font-size: 12px;
   color: var(--muted);
 }
@@ -1549,7 +1552,7 @@ a:hover {
 
 .timer-card {
   border: 1px solid var(--border);
-  border-radius: 24px;
+  border-radius: 20px;
   padding: 34px;
   background: var(--panel);
   backdrop-filter: blur(22px) saturate(150%);
@@ -1611,7 +1614,7 @@ a:hover {
 
 .session-card {
   border: 1px solid var(--border);
-  border-radius: 24px;
+  border-radius: 20px;
   padding: 28px;
   background: var(--panel-2);
   backdrop-filter: blur(20px);
@@ -1646,7 +1649,7 @@ a:hover {
 .tm-track {
   margin-top: 20px;
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 17px;
   padding: 22px;
   background: var(--panel);
   backdrop-filter: blur(18px);
@@ -1670,7 +1673,7 @@ a:hover {
   font-family: "JetBrains Mono", monospace;
   font-size: 9px;
   letter-spacing: 0.1em;
-  border-radius: 6px;
+  border-radius: 5px;
 }
 .tm-track-block.focus {
   background: var(--accent-soft);
@@ -1699,7 +1702,7 @@ a:hover {
   flex-direction: column;
   gap: 8px;
   padding: 14px;
-  border-radius: 24px;
+  border-radius: 20px;
   border: 1px solid var(--border);
   background: var(--panel-2);
   backdrop-filter: blur(20px);
@@ -1716,7 +1719,7 @@ a:hover {
   align-items: center;
   gap: 14px;
   padding: 18px 20px;
-  border-radius: 16px;
+  border-radius: 14px;
   border: 1px solid var(--border);
   background: var(--panel);
   transition:
@@ -1771,7 +1774,7 @@ a:hover {
   flex-direction: column;
   gap: 8px;
   padding: 24px;
-  border-radius: 20px;
+  border-radius: 17px;
   background: var(--panel);
   backdrop-filter: blur(20px) saturate(140%);
   border: 1px solid var(--border);
@@ -1808,7 +1811,7 @@ a:hover {
   align-items: center;
   gap: 16px;
   padding: 24px;
-  border-radius: 22px;
+  border-radius: 19px;
   background: var(--panel);
   backdrop-filter: blur(20px) saturate(140%);
   border: 1px solid var(--border);
@@ -1883,7 +1886,7 @@ a:hover {
 .stats-chart-section {
   margin-top: 20px;
   padding: 28px;
-  border-radius: 24px;
+  border-radius: 20px;
   background: var(--panel-2);
   backdrop-filter: blur(20px);
   border: 1px solid var(--border);
@@ -1893,14 +1896,14 @@ a:hover {
   display: flex;
   gap: 4px;
   padding: 4px;
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--accent-soft);
   border: 1px solid var(--border);
   width: fit-content;
   margin-bottom: 34px;
 }
 .chart-tab {
-  border-radius: 10px;
+  border-radius: 9px;
   padding: 9px 20px;
   font-size: 13px;
   font-weight: 700;
@@ -1981,7 +1984,7 @@ a:hover {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
   background: var(--panel);
 }
@@ -2076,7 +2079,7 @@ a:hover {
   right: 0;
   bottom: 5px;
   padding: 3px 7px;
-  border-radius: 6px;
+  border-radius: 5px;
   background: var(--panel-solid);
   color: var(--muted);
   font-size: 9px;
@@ -2094,7 +2097,7 @@ a:hover {
   min-width: 0;
   padding: 5px 1px;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 7px;
   color: var(--muted);
   font-size: 11px;
   font-weight: 600;
@@ -2150,7 +2153,7 @@ a:hover {
 .goal-setting {
   margin-top: 20px;
   padding: 24px;
-  border-radius: 22px;
+  border-radius: 19px;
   background: var(--panel);
   backdrop-filter: blur(20px);
   border: 1px solid var(--border);
@@ -2178,7 +2181,7 @@ a:hover {
 .goal-stepper {
   display: flex;
   align-items: center;
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--panel-2);
   border: 1px solid var(--border);
   overflow: hidden;
@@ -2235,7 +2238,7 @@ a:hover {
   display: flex;
   gap: 4px;
   padding: 4px;
-  border-radius: 16px;
+  border-radius: 14px;
   background: var(--accent-soft);
   border: 1px solid var(--border);
   margin-top: 30px;
@@ -2244,7 +2247,7 @@ a:hover {
 }
 .set-tabs button {
   padding: 10px 20px;
-  border-radius: 12px;
+  border-radius: 10px;
   font-size: 13px;
   font-weight: 700;
   color: var(--muted);
@@ -2262,7 +2265,7 @@ a:hover {
 }
 .set-card {
   border: 1px solid var(--border);
-  border-radius: 22px;
+  border-radius: 19px;
   padding: 28px;
   background: var(--panel);
   backdrop-filter: blur(20px) saturate(140%);
@@ -2340,7 +2343,7 @@ a:hover {
 .set-grid-2 input,
 .set-grid-3 input {
   padding: 13px 15px;
-  border-radius: 13px;
+  border-radius: 11px;
   font-size: 14px;
 }
 .set-card-actions {
@@ -2407,7 +2410,7 @@ form.set-card {
   justify-content: space-between;
   gap: 16px;
   padding: 16px 18px;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--panel-2);
 }
@@ -2439,14 +2442,14 @@ form.set-card {
   gap: 16px;
   margin-top: 16px;
   padding: 16px 18px;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--panel-2);
 }
 .set-card-chip {
   width: 42px;
   height: 28px;
-  border-radius: 6px;
+  border-radius: 5px;
   background: var(--accent);
   flex: none;
 }
@@ -2469,7 +2472,7 @@ form.set-card {
 .set-theme-card {
   text-align: left;
   padding: 16px;
-  border-radius: 18px;
+  border-radius: 15px;
   border: 1px solid var(--border);
   background: var(--panel-2);
   transition: all 0.2s;
@@ -2483,7 +2486,7 @@ form.set-card {
 .set-theme-swatch {
   display: block;
   height: 56px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid var(--border);
 }
 .set-theme-swatch.light {
@@ -2511,6 +2514,18 @@ form.set-card {
   color: var(--accent-text);
 }
 
+/* Keep Settings surfaces neutral in dark mode. */
+:root:not([data-theme="light"]) .set-tabs { background: #202020; }
+:root:not([data-theme="light"]) .set-card { background: #1a1a1a; }
+:root:not([data-theme="light"]) .set-card.muted,
+:root:not([data-theme="light"]) .set-session-row,
+:root:not([data-theme="light"]) .set-payment-row,
+:root:not([data-theme="light"]) .set-theme-card { background: #171717; }
+:root:not([data-theme="light"]) .set-avatar,
+:root:not([data-theme="light"]) .set-page .primary,
+:root:not([data-theme="light"]) .set-card-chip { background: #2c2c2c; }
+:root:not([data-theme="light"]) .set-theme-swatch.dark { background: linear-gradient(140deg, #121212, #242424); }
+
 /* ---------- Flashcards ---------- */
 .fc-library,
 .fc-workspace,
@@ -2534,7 +2549,7 @@ form.set-card {
   gap: 1px;
   margin-top: 28px;
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 15px;
   overflow: hidden;
   background: var(--border);
 }
@@ -2568,7 +2583,7 @@ form.set-card {
   gap: 10px;
   padding: 16px;
   margin: 22px 0;
-  border-radius: 18px;
+  border-radius: 15px;
   align-items: center;
   border: 1px solid var(--border);
   background: var(--panel);
@@ -2589,7 +2604,7 @@ form.set-card {
 .fc-topics > button {
   text-align: left;
   padding: 18px;
-  border-radius: 18px;
+  border-radius: 15px;
   border: 1px solid var(--border);
   background: var(--panel);
   color: var(--fg);
@@ -2680,7 +2695,7 @@ form.set-card {
 .fc-group-card,
 .fc-new-group-card,
 .fc-empty-deck {
-  border-radius: 22px;
+  border-radius: 19px;
   padding: 24px;
   background: var(--panel);
   backdrop-filter: blur(20px) saturate(140%);
@@ -2709,7 +2724,7 @@ form.set-card {
   font-size: 10px;
   letter-spacing: 0.12em;
   padding: 5px 9px;
-  border-radius: 8px;
+  border-radius: 7px;
   background: var(--accent-soft);
   color: var(--accent-text);
 }
@@ -2832,7 +2847,7 @@ form.set-card {
   gap: 20px;
   flex-wrap: wrap;
   padding: 22px;
-  border-radius: 18px;
+  border-radius: 15px;
   margin-bottom: 20px;
   border: 1px solid var(--border);
   background: var(--panel);
@@ -2864,13 +2879,13 @@ form.set-card {
 }
 .fc-time-field input {
   padding: 10px 12px;
-  border-radius: 10px;
+  border-radius: 9px;
   border: 1px solid var(--border);
   background: var(--panel-2);
 }
 .fc-reminder-submit {
   padding: 12px 18px;
-  border-radius: 12px;
+  border-radius: 10px;
   background: var(--accent);
   color: var(--accent-fg);
   font-size: 13px;
@@ -2880,7 +2895,7 @@ form.set-card {
 
 .fc-editor {
   padding: 20px;
-  border-radius: 18px;
+  border-radius: 15px;
   margin-bottom: 20px;
   border: 1px solid var(--border);
   background: var(--panel);
@@ -2912,7 +2927,7 @@ form.set-card {
   justify-content: space-between;
   gap: 16px;
   padding: 16px 18px;
-  border-radius: 16px;
+  border-radius: 14px;
   border: 1px solid var(--border);
   background: var(--panel);
   transition: border-color 0.18s;
@@ -3031,7 +3046,7 @@ form.set-card {
   position: absolute;
   inset: 0;
   backface-visibility: hidden;
-  border-radius: 26px;
+  border-radius: 22px;
   padding: 44px;
   display: flex;
   flex-direction: column;
@@ -3081,7 +3096,7 @@ form.set-card {
   letter-spacing: 0.12em;
   border: 1px solid var(--border);
   padding: 5px 8px;
-  border-radius: 7px;
+  border-radius: 6px;
 }
 
 .fc-grades {
@@ -3093,7 +3108,7 @@ form.set-card {
 }
 .fc-grade-btn {
   padding: 16px 12px;
-  border-radius: 16px;
+  border-radius: 14px;
   text-align: center;
   transition:
     transform 0.18s,
@@ -3162,7 +3177,7 @@ form.set-card {
   gap: 10px;
   padding: 16px;
   margin: 22px 0;
-  border-radius: 18px;
+  border-radius: 15px;
   align-items: center;
   border: 1px solid var(--border);
   background: var(--panel);
@@ -3188,7 +3203,7 @@ form.set-card {
   flex: 1;
   text-align: left;
   padding: 18px;
-  border-radius: 18px;
+  border-radius: 15px;
   border: 1px solid var(--border);
   background: var(--panel);
   color: var(--fg);
@@ -3231,7 +3246,7 @@ form.set-card {
 .nt-folder-delete {
   flex: none;
   width: 40px;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid var(--border);
   color: var(--muted);
   font-size: 16px;
@@ -3243,7 +3258,7 @@ form.set-card {
 }
 .nt-new-folder {
   padding: 16px;
-  border-radius: 18px;
+  border-radius: 15px;
   border: 1px dashed var(--border-strong);
   color: var(--muted);
   font-size: 13px;
@@ -3283,7 +3298,7 @@ form.set-card {
 }
 .nt-card {
   border: 1px solid var(--border);
-  border-radius: 22px;
+  border-radius: 19px;
   padding: 24px;
   background: var(--panel);
   backdrop-filter: blur(20px) saturate(140%);
@@ -3318,7 +3333,7 @@ form.set-card {
   font-size: 10px;
   letter-spacing: 0.1em;
   padding: 5px 10px;
-  border-radius: 8px;
+  border-radius: 7px;
   background: var(--accent-soft);
   color: var(--accent-text);
   transition: all 0.18s;
@@ -3349,7 +3364,7 @@ form.set-card {
   font-size: 10px;
   letter-spacing: 0.1em;
   padding: 4px 8px;
-  border-radius: 8px;
+  border-radius: 7px;
   background: var(--accent-soft);
   color: var(--accent-text);
 }
@@ -3391,7 +3406,7 @@ form.set-card {
   padding: 60px 24px;
   text-align: center;
   border: 1px dashed var(--border-strong);
-  border-radius: 22px;
+  border-radius: 19px;
   color: var(--muted);
 }
 .nt-empty h2 {
@@ -3428,7 +3443,7 @@ form.set-card {
 .nt-sticky-toggle {
   margin-left: auto;
   padding: 10px 16px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--panel);
   font-size: 12px;
@@ -3445,7 +3460,7 @@ form.set-card {
   color: var(--muted);
   background: var(--panel-2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 10px 14px;
   margin-bottom: 14px;
 }
@@ -3463,7 +3478,7 @@ form.set-card {
 
 .nt-editor-wrap {
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 17px;
   overflow: hidden;
   background: var(--panel-2);
 }
@@ -3478,7 +3493,7 @@ form.set-card {
 }
 .nt-tool {
   padding: 8px 10px;
-  border-radius: 8px;
+  border-radius: 7px;
   font-size: 12px;
   font-weight: 700;
   color: var(--fg-dim);
@@ -3498,7 +3513,7 @@ form.set-card {
   background: #ffe066;
   color: #5a4a00;
   padding: 1px 5px;
-  border-radius: 4px;
+  border-radius: 3px;
   font-size: 11px;
 }
 .nt-toolbar-sep {
@@ -3546,7 +3561,7 @@ form.set-card {
 }
 .nt-inline-image {
   max-width: 100%;
-  border-radius: 12px;
+  border-radius: 10px;
   margin: 8px 0;
 }
 .nt-draw-canvas {
@@ -3567,7 +3582,7 @@ form.set-card {
 .nt-tasks,
 .nt-reminder {
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 15px;
   padding: 20px;
   background: var(--panel);
 }
@@ -3579,7 +3594,7 @@ form.set-card {
 .nt-task-form input {
   flex: 1;
   padding: 10px 12px;
-  border-radius: 10px;
+  border-radius: 9px;
   border: 1px solid var(--border);
   background: var(--panel-2);
 }
@@ -3604,7 +3619,7 @@ form.set-card {
   justify-content: space-between;
   gap: 8px;
   padding: 8px 6px;
-  border-radius: 10px;
+  border-radius: 9px;
 }
 .nt-tasks li:hover {
   background: var(--panel-2);
@@ -3638,7 +3653,7 @@ form.set-card {
 .nt-reminder input[type="datetime-local"] {
   margin-top: 8px;
   padding: 10px 12px;
-  border-radius: 10px;
+  border-radius: 9px;
   border: 1px solid var(--border);
   background: var(--panel-2);
 }
@@ -3662,7 +3677,7 @@ form.set-card {
   z-index: 80;
   width: 320px;
   border: 1px solid var(--border-strong);
-  border-radius: 20px;
+  border-radius: 17px;
   overflow: hidden;
   background: var(--panel);
   backdrop-filter: blur(24px) saturate(150%);
@@ -3707,7 +3722,7 @@ form.set-card {
 .sticky-close {
   width: 24px;
   height: 24px;
-  border-radius: 7px;
+  border-radius: 6px;
   color: var(--muted);
   font-size: 14px;
   line-height: 1;
@@ -3749,7 +3764,7 @@ form.set-card {
   width: 240px;
   border: 1px solid var(--border-strong);
   border-top: 3px solid var(--accent-text);
-  border-radius: 18px;
+  border-radius: 15px;
   overflow: hidden;
   background: var(--panel);
   backdrop-filter: blur(24px) saturate(150%);
@@ -3766,7 +3781,7 @@ form.set-card {
   overflow: hidden;
   border: 1px solid var(--border-strong);
   border-top: 3px solid var(--accent-text);
-  border-radius: 18px;
+  border-radius: 15px;
   background: var(--panel-solid);
   backdrop-filter: blur(24px) saturate(150%);
   box-shadow: var(--shadow), var(--inset);
@@ -3915,7 +3930,7 @@ form.set-card {
 .cd-view-empty,
 .cd-empty {
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 15px;
   padding: 20px;
   background: var(--panel);
 }
@@ -3948,7 +3963,7 @@ form.set-card {
   justify-content: space-between;
   gap: 16px;
   padding: 16px 18px;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid var(--border);
   border-left: 3px solid var(--accent-text);
   background: var(--panel);
@@ -3979,14 +3994,14 @@ form.set-card {
   gap: 12px;
   padding: 20px;
   margin-top: 12px;
-  border-radius: 18px;
+  border-radius: 15px;
   border: 1px solid var(--border);
   background: var(--panel-2);
 }
 .cd-form-title,
 .cd-form-date {
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--panel);
   color: var(--fg);
@@ -4029,7 +4044,7 @@ form.set-card {
   width: min(520px, 100%);
   max-height: 85vh;
   overflow-y: auto;
-  border-radius: 22px;
+  border-radius: 19px;
   padding: 26px;
   border: 1px solid var(--border-strong);
   background: var(--panel-solid);
@@ -4063,7 +4078,7 @@ form.set-card {
 .cd-import-row input {
   flex: 1;
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--panel-2);
 }
@@ -4074,7 +4089,7 @@ form.set-card {
 }
 .cd-import-paste textarea {
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--panel-2);
   font-family: "JetBrains Mono", monospace;
@@ -4098,7 +4113,7 @@ form.set-card {
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid var(--border);
 }
 .cd-import-item.selected {
@@ -4122,7 +4137,7 @@ form.set-card {
 }
 .cd-card {
   border: 1px solid var(--warn);
-  border-radius: 22px;
+  border-radius: 19px;
   padding: 26px;
   background: var(--panel);
   backdrop-filter: blur(20px) saturate(140%);
@@ -4194,7 +4209,7 @@ form.set-card {
 }
 .cd-view-list {
   border: 1px solid var(--border);
-  border-radius: 22px;
+  border-radius: 19px;
   padding: 22px;
   background: var(--panel-2);
 }
@@ -4205,7 +4220,7 @@ form.set-card {
 
 .cd-calendar {
   border: 1px solid var(--border);
-  border-radius: 22px;
+  border-radius: 19px;
   padding: 22px;
   background: var(--panel-2);
   backdrop-filter: blur(20px);
@@ -4224,7 +4239,7 @@ form.set-card {
 .cd-cal-nav {
   width: 32px;
   height: 32px;
-  border-radius: 10px;
+  border-radius: 9px;
   border: 1px solid var(--border);
   color: var(--muted);
   transition: all 0.18s;
@@ -4256,7 +4271,7 @@ form.set-card {
   aspect-ratio: 1;
   display: grid;
   place-items: center;
-  border-radius: 11px;
+  border-radius: 9px;
   font-size: 13px;
   font-weight: 600;
   position: relative;

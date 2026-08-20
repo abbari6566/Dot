@@ -187,10 +187,9 @@ function AppTab() {
   </div>;
 }
 
-export default function SettingsView({ profile, onProfileUpdate, onBack }: {
+export default function SettingsView({ profile, onProfileUpdate }: {
   profile: UserProfile | null;
   onProfileUpdate: (u: UserProfile) => void;
-  onBack: () => void;
   onSignOut: () => Promise<void>;
 }) {
   const [tab, setTab] = useState<Tab>("profile");
@@ -201,7 +200,6 @@ export default function SettingsView({ profile, onProfileUpdate, onBack }: {
     { id: "app", label: "App" },
   ];
   return <section className="set-page">
-    <button type="button" className="fc-back" onClick={onBack}>← <span>Back to app</span></button>
     <span className="eyebrow mono">Account</span>
     <h1>Settings</h1>
     <p className="set-lede">Your profile, security, billing and how the app behaves.</p>

@@ -422,7 +422,7 @@ function App() {
               : view === "notes" ? <NotesView pinnedNoteId={pinnedNote?.id ?? null} onPin={setPinnedNote} onUnpin={() => setPinnedNote(null)} />
               : view === "countdowns" ? <CountdownView countdowns={countdowns} onChange={reloadCountdowns} />
               : view === "history" ? <History cycles={history} />
-              : view === "settings" ? <SettingsView profile={profile} onProfileUpdate={setProfile} onBack={() => setView("timer")} onSignOut={signOut} />
+              : view === "settings" ? <SettingsView profile={profile} onProfileUpdate={setProfile} onSignOut={signOut} />
               : <StatsView cycles={history} profile={profile} onProfileUpdate={setProfile} />}
           </motion.div>
         </AnimatePresence>}
