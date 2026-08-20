@@ -957,6 +957,7 @@ a:hover {
 .auth-card input,
 .tm-preset-grid input,
 .fc-inline-form input,
+.nt-inline-form input,
 .fc-editor textarea,
 .fc-reminder input,
 .set-grid-2 input,
@@ -975,6 +976,7 @@ a:hover {
 .auth-card input:focus,
 .tm-preset-grid input:focus,
 .fc-inline-form input:focus,
+.nt-inline-form input:focus,
 .fc-editor textarea:focus,
 .fc-reminder input:focus,
 .set-grid-2 input:focus,
@@ -1048,9 +1050,10 @@ a:hover {
   border-color: var(--border-strong);
   color: var(--fg);
 }
-.sidebar-toggle svg {
-  width: 15px;
-  height: 15px;
+.panel-chevron {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 15px;
+  line-height: 1;
 }
 
 .sidebar-reveal {
@@ -1074,10 +1077,6 @@ a:hover {
 .sidebar-reveal:hover {
   border-color: var(--border-strong);
   transform: translateX(2px);
-}
-.sidebar-reveal svg {
-  width: 15px;
-  height: 15px;
 }
 .sidebar-reveal-dot {
   width: 9px;
@@ -1292,13 +1291,17 @@ a:hover {
   font-weight: 800;
   margin: 8px 0 26px;
 }
+.tm-cmd-label {
+  display: block;
+  margin: 0 0 10px 4px;
+}
 
 .tm-cmd {
   display: flex;
   align-items: center;
   gap: 14px;
   padding: 20px 22px;
-  border-radius: 17px;
+  border-radius: 14px;
   border: 1px solid var(--border-strong);
   background: var(--panel);
   backdrop-filter: blur(22px) saturate(150%);
@@ -1335,7 +1338,7 @@ a:hover {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
-  margin-top: 18px;
+  margin-top: 24px;
   border: 1px solid var(--border);
   border-radius: 14px;
   overflow: hidden;
@@ -1366,9 +1369,14 @@ a:hover {
 .tm-chips {
   display: flex;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 24px;
   flex-wrap: wrap;
   align-items: center;
+}
+.tm-presets-label {
+  margin-right: 4px;
+  transform: translateX(5px);
+  white-space: nowrap;
 }
 .tm-chip {
   display: flex;
@@ -1426,9 +1434,9 @@ a:hover {
 }
 
 .tm-preset-form {
-  margin-top: 18px;
+  margin-top: 24px;
   border: 1px solid var(--border-strong);
-  border-radius: 17px;
+  border-radius: 14px;
   padding: 22px;
   background: var(--panel);
   backdrop-filter: blur(20px);
@@ -1463,9 +1471,9 @@ a:hover {
 }
 
 .tm-plan-preview {
-  margin-top: 30px;
+  margin-top: 24px;
   border: 1px solid var(--border);
-  border-radius: 17px;
+  border-radius: 14px;
   padding: 24px;
   background: var(--panel-2);
   backdrop-filter: blur(18px);
@@ -1565,8 +1573,16 @@ a:hover {
   font-size: 16px;
   font-weight: 600;
 }
-.timer-card-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.timer-card-head .outline { flex: 0 0 auto; padding: 10px 16px; }
+.timer-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.timer-card-head .outline {
+  flex: 0 0 auto;
+  padding: 10px 16px;
+}
 .time {
   font-size: clamp(72px, 9vw, 118px);
   font-weight: 800;
@@ -2515,16 +2531,26 @@ form.set-card {
 }
 
 /* Keep Settings surfaces neutral in dark mode. */
-:root:not([data-theme="light"]) .set-tabs { background: #202020; }
-:root:not([data-theme="light"]) .set-card { background: #1a1a1a; }
+:root:not([data-theme="light"]) .set-tabs {
+  background: #202020;
+}
+:root:not([data-theme="light"]) .set-card {
+  background: #1a1a1a;
+}
 :root:not([data-theme="light"]) .set-card.muted,
 :root:not([data-theme="light"]) .set-session-row,
 :root:not([data-theme="light"]) .set-payment-row,
-:root:not([data-theme="light"]) .set-theme-card { background: #171717; }
+:root:not([data-theme="light"]) .set-theme-card {
+  background: #171717;
+}
 :root:not([data-theme="light"]) .set-avatar,
 :root:not([data-theme="light"]) .set-page .primary,
-:root:not([data-theme="light"]) .set-card-chip { background: #2c2c2c; }
-:root:not([data-theme="light"]) .set-theme-swatch.dark { background: linear-gradient(140deg, #121212, #242424); }
+:root:not([data-theme="light"]) .set-card-chip {
+  background: #2c2c2c;
+}
+:root:not([data-theme="light"]) .set-theme-swatch.dark {
+  background: linear-gradient(140deg, #121212, #242424);
+}
 
 /* ---------- Flashcards ---------- */
 .fc-library,
@@ -3177,10 +3203,23 @@ form.set-card {
   gap: 10px;
   padding: 16px;
   margin: 22px 0;
-  border-radius: 15px;
+  border-radius: 14px;
   align-items: center;
   border: 1px solid var(--border);
   background: var(--panel);
+  box-shadow: var(--shadow-sm), var(--inset);
+  backdrop-filter: blur(18px) saturate(140%);
+}
+.nt-inline-form input {
+  min-height: 44px;
+}
+.nt-inline-form .primary {
+  min-height: 44px;
+  white-space: nowrap;
+}
+.nt-inline-form .text-button {
+  padding: 10px 12px;
+  white-space: nowrap;
 }
 .nt-layout {
   display: grid;
@@ -3197,7 +3236,6 @@ form.set-card {
 .nt-folder-row {
   display: flex;
   align-items: stretch;
-  gap: 6px;
 }
 .nt-folder-row button:first-child {
   flex: 1;
@@ -3243,19 +3281,6 @@ form.set-card {
   height: 100%;
   background: var(--accent-text);
 }
-.nt-folder-delete {
-  flex: none;
-  width: 40px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-size: 16px;
-  transition: all 0.18s;
-}
-.nt-folder-delete:hover {
-  border-color: var(--danger);
-  color: var(--danger);
-}
 .nt-new-folder {
   padding: 16px;
   border-radius: 15px;
@@ -3290,6 +3315,35 @@ form.set-card {
   font-weight: 800;
   letter-spacing: -0.02em;
   margin: 8px 0 0;
+}
+.nt-folder-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+.nt-folder-action {
+  min-width: 78px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  transition: transform 0.18s, filter 0.18s;
+}
+.nt-folder-action.rename {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border: 1px solid var(--border-strong);
+}
+.nt-folder-action.delete {
+  background: var(--danger);
+}
+.nt-folder-action:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
 }
 .nt-cards {
   display: grid;
@@ -3426,16 +3480,18 @@ form.set-card {
   flex-wrap: wrap;
   margin-bottom: 20px;
 }
-.nt-workspace-title {
+.nt-title-row {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: baseline;
+  gap: 10px;
   min-width: 0;
+  margin-bottom: 14px;
 }
 .nt-save-state {
   font-size: 11px;
   font-weight: 700;
   color: var(--muted);
+  flex: none;
 }
 .nt-save-state.unsaved {
   color: var(--accent-text);
@@ -3465,7 +3521,11 @@ form.set-card {
   margin-bottom: 14px;
 }
 .nt-title-input {
-  width: 100%;
+  width: auto;
+  field-sizing: content;
+  min-width: 0;
+  max-width: calc(100% - 64px);
+  flex: 0 1 auto;
   border: 0;
   background: none;
   outline: none;
@@ -3473,7 +3533,7 @@ form.set-card {
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--fg);
-  margin-bottom: 14px;
+  margin-bottom: 0;
 }
 
 .nt-editor-wrap {

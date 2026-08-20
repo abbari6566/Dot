@@ -359,9 +359,9 @@ function CalendarPicker({ targetDates, selectedDate, onSelect }: {
   return (
     <div className="cd-calendar">
       <div className="cd-cal-head">
-        <button className="cd-cal-nav" onClick={prev} aria-label="Previous month">‹</button>
+        <button className="cd-cal-nav" onClick={prev} aria-label="Previous month">{"<"}</button>
         <span className="cd-cal-month">{monthLabel}</span>
-        <button className="cd-cal-nav" onClick={next} aria-label="Next month">›</button>
+        <button className="cd-cal-nav" onClick={next} aria-label="Next month">{">"}</button>
       </div>
       <div className="cd-cal-weekdays">
         {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map(d => <span key={d}>{d}</span>)}

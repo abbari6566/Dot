@@ -37,7 +37,7 @@ export default function TimerWidget({ cycle, onClose, onOpen }: { cycle: Pomodor
       <span className="timer-widget-dot-label">DOT {active.sessionNumber} OF {cycle.totalSessions}</span>
       <strong>{time}</strong>
       <span className="timer-widget-dots">{Array.from({ length: cycle.totalSessions }, (_, index) => <i key={index} className={index < completed ? "done" : index === completed ? "active" : ""} />)}</span>
-      <span className="timer-widget-open">Open timer →</span>
+      <span className="timer-widget-open">Open timer &gt;</span>
     </button>
   </motion.aside>;
 }

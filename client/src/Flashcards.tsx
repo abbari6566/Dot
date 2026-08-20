@@ -105,7 +105,7 @@ function ReviewSession({ title, cards, onExit, onGraded }: { title: string; card
 
   return <section className="fc-review">
     <div className="fc-review-head">
-      <button type="button" className="fc-back" onClick={leave}>← <span>Leave review</span></button>
+      <button type="button" className="fc-back" onClick={leave}>{"<"} <span>Leave review</span></button>
       <span className="eyebrow mono">{title}</span>
       <span className="fc-review-counter mono">{finished ? "SESSION COMPLETE" : `${Math.min(index + 1, cards.length)} / ${cards.length}`}</span>
     </div>
@@ -144,7 +144,7 @@ function GroupWorkspace({ group, topic, reload, close, reportError, onReview }: 
   const [adding, setAdding] = useState(group.flashcards.length === 0); const [editing, setEditing] = useState<Flashcard | null>(null);
   useEffect(() => { const handler = (event: KeyboardEvent) => { if (event.key === "Escape") { setAdding(false); setEditing(null); } }; addEventListener("keydown", handler); return () => removeEventListener("keydown", handler); }, []);
   const due = group.flashcards.filter(isDue);
-  return <section className="fc-workspace"><header className="fc-workspace-header"><button className="fc-back" onClick={close}>← <span>All groups</span></button><div className="fc-workspace-title"><span className="eyebrow">{topic.name}</span><h1>{group.name}</h1><p>{group.description || `${group.flashcards.length} cards in this group`}</p></div>
+  return <section className="fc-workspace"><header className="fc-workspace-header"><button className="fc-back" onClick={close}>{"<"} <span>All groups</span></button><div className="fc-workspace-title"><span className="eyebrow">{topic.name}</span><h1>{group.name}</h1><p>{group.description || `${group.flashcards.length} cards in this group`}</p></div>
     <div className="fc-workspace-actions">
       {group.flashcards.length > 0 && <button className="outline" onClick={() => onReview(due.length ? due : group.flashcards, group.name.toUpperCase())}>{due.length ? `Review ${due.length} due` : "Practice deck"}</button>}
       <button className="primary" onClick={() => { setAdding(true); setEditing(null); }}>+ Add flashcard</button>
@@ -214,7 +214,7 @@ export default function FlashcardsView() {
             <h3>{item.name}</h3><p>{item.description || "A focused collection of cards."}</p>
             <div className="fc-group-stats mono"><span>Mastery {mastery}%</span><span>{dueLabel(item.flashcards)}</span></div>
             <span className="fc-mastery-bar"><span style={{ width: `${mastery}%` }} /></span>
-            <button className="fc-open-group" onClick={() => item.flashcards.length === 0 ? setGroupId(item.id) : startReview(due.length ? due : item.flashcards, item.name.toUpperCase())}><span>{cta}</span><b>→</b></button>
+            <button className="fc-open-group" onClick={() => item.flashcards.length === 0 ? setGroupId(item.id) : startReview(due.length ? due : item.flashcards, item.name.toUpperCase())}><span>{cta}</span><b>{">"}</b></button>
             <button className="text-button fc-manage-link" onClick={() => setGroupId(item.id)}>Manage cards</button>
           </article>;
         })}{!topic.groups.length && <button className="fc-new-group-card" onClick={() => setCreatingGroup(true)}><span>+</span><strong>Create your first group</strong><small>Each group can have its own reminder.</small></button>}</div>

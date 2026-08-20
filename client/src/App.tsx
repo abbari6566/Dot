@@ -47,11 +47,11 @@ function IconLogout() {
 }
 
 function IconPanel() {
-  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 5v14" /><path d="M20 12H9" /><path d="M13 8l-4 4 4 4" /></svg>;
+  return <span className="panel-chevron" aria-hidden="true">{"<"}</span>;
 }
 
 function IconReveal() {
-  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 5v14" /><path d="M9 12h11" /><path d="M16 8l4 4-4 4" /></svg>;
+  return <span className="panel-chevron" aria-hidden="true">{">"}</span>;
 }
 
 function Avatar({ name }: { name?: string }) {
@@ -94,7 +94,7 @@ function Auth({ onAuthenticated, initialMode, onBack }: { onAuthenticated: () =>
       </AnimatePresence>
       <button className="primary" disabled={busy}>{busy ? "Please wait…" : mode === "login" ? "Sign in" : "Create account"}</button>
       <button type="button" className="text-button" onClick={() => { setMode(mode === "login" ? "register" : "login"); setError(""); }}>{mode === "login" ? "New here? Create an account" : "Already have an account? Sign in"}</button>
-      <button type="button" className="text-button" onClick={onBack}>← Back to home</button>
+      <button type="button" className="text-button" onClick={onBack}>{"<"} Back to home</button>
     </form></section>
   </motion.main>;
 }
@@ -169,21 +169,16 @@ function TimerSetup({ onStart }: { onStart: (minutes: number, sessions: number, 
   };
 
   return <section className="tm-setup">
-    <span className="eyebrow mono">Type your cycle</span>
     <div className="tm-setup-tag">One more .DOT towards your goal.</div>
     <h1>Plan it in one line.</h1>
+    <span className="eyebrow mono tm-cmd-label">Type your cycle</span>
     <form className="tm-cmd" onSubmit={event => { event.preventDefault(); void start(); }}>
       <span className="tm-cmd-caret">›</span>
       <input type="text" value={cmd} onChange={event => setCmd(event.target.value)} placeholder="deep work 45 x 4 break 5" autoFocus />
       <span className="tm-cmd-hint">⏎ start</span>
     </form>
-    <div className="tm-parsed">
-      <div><span>Intent</span><strong>{parsed.label}</strong></div>
-      <div><span>Length</span><strong>{parsed.minutes}m</strong></div>
-      <div><span>Dots</span><strong>{parsed.sessions}</strong></div>
-      <div><span>Breaks</span><strong>{parsed.brk}m</strong></div>
-    </div>
     <div className="tm-chips">
+      <span className="eyebrow mono tm-presets-label">Presets Timer</span>
       {DEFAULT_PRESETS.map(p => <span key={p.cmd} className={`tm-chip${cmd === p.cmd ? " active" : ""}`}>
         <button type="button" onClick={() => setCmd(p.cmd)}>{p.label}</button>
       </span>)}
@@ -209,6 +204,12 @@ function TimerSetup({ onStart }: { onStart: (minutes: number, sessions: number, 
         </div>
       </motion.div>}
     </AnimatePresence>
+    <div className="tm-parsed">
+      <div><span>Intent</span><strong>{parsed.label}</strong></div>
+      <div><span>Length</span><strong>{parsed.minutes}m</strong></div>
+      <div><span>Dots</span><strong>{parsed.sessions}</strong></div>
+      <div><span>Breaks</span><strong>{parsed.brk}m</strong></div>
+    </div>
     <div className="tm-plan-preview">
       <span className="eyebrow mono">Today's plan · preview</span>
       <div className="tm-plan-blocks">
@@ -216,7 +217,7 @@ function TimerSetup({ onStart }: { onStart: (minutes: number, sessions: number, 
       </div>
       <div className="tm-plan-times"><span>starts {fmtTime(new Date(now))}</span><span>ends {fmtTime(new Date(now + planTotal * 60000))} · {Math.round(planTotal / 6) / 10}h</span></div>
     </div>
-    <button type="button" className="primary tm-start" disabled={busy} onClick={start}>{busy ? "Starting…" : "Start focus cycle →"}</button>
+    <button type="button" className="primary tm-start" disabled={busy} onClick={start}>{busy ? "Starting…" : "Start focus cycle >"}</button>
     <div className="tm-shortcuts"><span>⏎ start</span><span>space pause</span><span>esc end</span></div>
   </section>;
 }

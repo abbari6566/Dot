@@ -241,12 +241,14 @@ function NoteEditor({ note, reload, close, pinned, onPin, onUnpin, reportError }
 
   return <section className="nt-workspace">
     <header className="nt-workspace-header">
-      <button className="fc-back" onClick={close}>← <span>All notes</span></button>
-      <div className="nt-workspace-title"><span className="eyebrow">Note</span><span className={`nt-save-state${saved ? "" : " unsaved"}`}>{saving ? "Working…" : saved ? "Saved" : "Saving…"}</span></div>
+      <button className="fc-back" onClick={close}>{"<"} <span>All notes</span></button>
       <button className={pinned ? "nt-sticky-toggle active" : "nt-sticky-toggle"} onClick={() => pinned ? onUnpin() : onPin(note)} title={pinned ? "Sticky note is floating — click to remove" : "Pin as a floating sticky note"}><span>{pinned ? "Sticky on" : "Pin sticky"}</span></button>
     </header>
     {pinned && <div className="nt-sticky-hint">This note is pinned as a floating window. Drag it anywhere from its header; close it from the sticky itself.</div>}
-    <input className="nt-title-input" value={title} onChange={event => { setTitle(event.target.value); persist(); }} placeholder="Untitled" maxLength={300} />
+    <div className="nt-title-row">
+      <input className="nt-title-input" value={title} onChange={event => { setTitle(event.target.value); persist(); }} placeholder="Untitled" maxLength={300} />
+      <span className={`nt-save-state${saved ? "" : " unsaved"}`}>{saving ? "Working…" : saved ? "Saved" : "Saving…"}</span>
+    </div>
     <RichEditor value={content} onChange={html => { setContent(html); persist(); }} reportError={reportError} />
     <div className="nt-panels">
       <TaskList tasks={tasks} onToggle={async task => { try { const result = await api.toggleTask(task.id, !task.done); setTasks(current => current.map(item => item.id === task.id ? result.task : item)); } catch (error) { reportError(errorMessage(error)); } }} onDelete={async task => { try { await api.deleteTask(task.id); setTasks(current => current.filter(item => item.id !== task.id)); } catch (error) { reportError(errorMessage(error)); } }} onAdd={async text => { try { const result = await api.createTask(note.id, text); setTasks(current => [...current, result.task]); } catch (error) { reportError(errorMessage(error)); } }} />
@@ -280,7 +282,7 @@ function NoteCard({ note, onOpen, onPin, onDelete, pinned }: { note: Note; onOpe
     </div>
     {note.tasks.length > 0 && <span className="nt-card-progress"><span style={{ width: `${progress}%` }} /></span>}
     <div className="nt-card-actions">
-      <button className="nt-card-open" onClick={onOpen}>Open note →</button>
+      <button className="nt-card-open" onClick={onOpen}>Open note &gt;</button>
       <button className="text-button danger" onClick={onDelete}>Delete</button>
     </div>
   </motion.article>;
@@ -328,6 +330,17 @@ export default function NotesView({ pinnedNoteId, onPin, onUnpin }: { pinnedNote
     if (noteId && !notes.some(item => item.id === noteId) && notes.length) setNoteId("");
   }, [noteId, notes]);
 
+  const deleteFolder = async (target: NoteFolder) => {
+    if (!confirm(`Delete folder “${target.name}” and all its notes?`)) return;
+    try {
+      await api.deleteFolder(target.id);
+      if (folderId === target.id) setFolderId("");
+      await load();
+    } catch (error) {
+      setError(errorMessage(error));
+    }
+  };
+
   if (loading) return <div className="loader"><i /></div>;
 
   if (note) return <>{error && <p className="error banner fc-floating-error">{error}</p>}<NoteEditor key={note.id} note={note} reload={load} close={() => setNoteId("")} pinned={note.id === pinnedNoteId} onPin={onPin} onUnpin={onUnpin} reportError={setError} /></>;
@@ -348,14 +361,13 @@ export default function NotesView({ pinnedNoteId, onPin, onUnpin }: { pinnedNote
               <strong>{item.name}</strong><span>{item.notes.length} {item.notes.length === 1 ? "note" : "notes"}</span>
               <span className="nt-folder-progress"><span style={{ width: `${progress}%` }} /></span>
             </button>
-            <button className="nt-folder-delete" title="Delete folder" aria-label={`Delete folder ${item.name}`} onClick={async () => { if (!confirm(`Delete folder “${item.name}” and all its notes?`)) return; try { await api.deleteFolder(item.id); if (folderId === item.id) setFolderId(""); await load(); } catch (error) { setError(errorMessage(error)); } }}>×</button>
           </div>;
         })}
         <button className="nt-new-folder" onClick={() => { setCreatingFolder(true); setRenaming(false); }}>+ New folder</button>
         {!folders.length && <p className="nt-folders-empty">Folders keep your notes organized. Create your first one.</p>}
       </aside>
       <main className="nt-notes">
-        {folder ? <><div className="nt-heading-row"><div><span className="eyebrow">Folder</span><h2>{folder.name}</h2></div><button className="text-button danger" onClick={() => setRenaming(value => !value)}>Rename</button></div>
+        {folder ? <><div className="nt-heading-row"><div><span className="eyebrow">Folder</span><h2>{folder.name}</h2></div><div className="nt-folder-actions"><button className="nt-folder-action rename" onClick={() => setRenaming(value => !value)}>Rename</button><button className="nt-folder-action delete" onClick={() => void deleteFolder(folder)}>Delete</button></div></div>
           {renaming && <form className="nt-inline-form" onSubmit={async (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const data = new FormData(event.currentTarget); try { await api.renameFolder(folder.id, String(data.get("name"))); setRenaming(false); await load(); } catch (error) { setError(errorMessage(error)); } }}><input name="name" required maxLength={100} defaultValue={folder.name} autoFocus /><button className="primary">Rename</button><button type="button" className="text-button" onClick={() => setRenaming(false)}>Cancel</button></form>}
           {notes.length ? <div className="nt-cards">{notes.map(item => <NoteCard key={item.id} note={item} pinned={item.id === pinnedNoteId} onOpen={() => setNoteId(item.id)} onPin={() => item.id === pinnedNoteId ? onUnpin() : onPin(item)} onDelete={async () => { if (!confirm(`Delete note “${item.title || "Untitled"}”?`)) return; try { if (item.id === pinnedNoteId) onUnpin(); await api.deleteNote(item.id); await load(); } catch (error) { setError(errorMessage(error)); } }} />)}</div>
             : <div className="nt-empty"><h2>This folder is empty.</h2><p>Create a note to start capturing ideas.</p></div>}
